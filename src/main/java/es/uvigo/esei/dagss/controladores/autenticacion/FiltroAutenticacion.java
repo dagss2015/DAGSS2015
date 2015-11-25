@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
             "/faces/farmacia/privado/*",
             "/faces/medico/privado/*",
             "/faces/paciente/privado/*",})
-public class FiltroAutenticacion {//implements Filter {
+public class FiltroAutenticacion implements Filter {
 
     @Inject
     AutenticacionControlador autenticacionControlador;
@@ -35,7 +35,7 @@ public class FiltroAutenticacion {//implements Filter {
     public FiltroAutenticacion() {
     }
 
-    //@Override
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         boolean aceptarPeticion = true;
 
@@ -83,5 +83,13 @@ public class FiltroAutenticacion {//implements Filter {
             tipoURL = matcher.group(1);
         }
         return tipoURL;
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
+
+    @Override
+    public void destroy() {
     }
 }
