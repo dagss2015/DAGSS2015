@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
-        <p:dialog id="dialogoNuevo" widgetVar="DialogoNuevo" modal="true" resizable="false" appendTo="@(body)" header="Nuevo Centro de Salud">
+        <p:dialog id="dialogoNuevo" widgetVar="DialogoNuevo" modal="true" resizable="false" appendTo="@(body)" header="Nuevo Médico">
             <h:form id="formularioNuevo">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{gestionMedicosControlador.medicoActual != null}">
@@ -30,7 +30,7 @@
 
                         <h:outputLabel value="Centro salud:" for="centrosalud"/>
                         <p:selectOneMenu id="centrosalud" value="#{gestionMedicosControlador.medicoActual.centroSalud}"
-                                         converter="centroSaludConverter">                
+                                         converter="omnifaces.SelectItemsConverter">                
                             <f:selectItems var="itemCentroSalud" value="#{gestionMedicosControlador.centrosSalud}"                                           
                                            itemValue="#{itemCentroSalud}" 
                                            itemLabel="#{itemCentroSalud.nombre} (#{itemCentroSalud.direccion.localidad})" />

@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <p:dialog id="dialogoEditar" widgetVar="DialogoEditar" modal="true" resizable="false" appendTo="@(body)" header="Editar Centro de Salud">
+        <p:dialog id="dialogoEditar" widgetVar="DialogoEditar" modal="true" resizable="false" appendTo="@(body)" header="Editar Médico">
             <h:form id="formularioEditar">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{gestionMedicosControlador.medicoActual != null}">
@@ -34,7 +34,7 @@
 
                         <h:outputLabel value="Centro salud:" for="centrosalud"/>
                         <p:selectOneMenu id="centrosalud" value="#{gestionMedicosControlador.medicoActual.centroSalud}"
-                                         converter="centroSaludConverter">                
+                                         converter="omnifaces.SelectItemsConverter">                
                             <f:selectItems var="itemCentroSalud" value="#{gestionMedicosControlador.centrosSalud}"
                                            itemValue="#{itemCentroSalud}" itemLabel="#{itemCentroSalud.nombre} (#{itemCentroSalud.direccion.localidad})" />
                         </p:selectOneMenu>                                                             
