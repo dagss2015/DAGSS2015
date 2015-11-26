@@ -24,5 +24,5 @@ INSERT INTO `CITA` VALUES (1, '15', 'PLANIFICADA', '2014-01-15', '09:00:00', 1, 
 -- Farmacia con nif "33333333C" y contraseña "33333"
 INSERT INTO `FARMACIA` VALUES (4,'2013-11-24 01:04:42','33333333C','Farmacia de prueba','/QpUw+ZRH3ndoNb3N4gRpT5cz0C7pT9v','FARMACIA','2013-11-24 01:04:42',1,'12345','C/. farmacia, nº 2, 4º N','Coruña','Coruña');
 
--- Ajustar el contador de IDs para que no colisiones con los IDs anteriores
-UPDATE USUARIO_GEN set GEN_VAL=100 WHERE GEN_NAME=USUARIO_GEN;
+-- Ajustar el contador de IDs para que no colision con los IDs anteriores
+UPDATE USUARIO_GEN set GEN_VAL=100 WHERE GEN_NAME='USUARIO_GEN';
