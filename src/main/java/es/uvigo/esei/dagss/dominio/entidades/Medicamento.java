@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -87,6 +86,15 @@ public class Medicamento implements Serializable {
         this.fabricante = fabricante;
     }
 
+    public String getFamilia() {
+        return familia;
+    }
+
+    public void setFamilia(String familia) {
+        this.familia = familia;
+    }
+
+    
     public Integer getNumeroDosis() {
         return numeroDosis;
     }

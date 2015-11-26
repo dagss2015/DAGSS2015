@@ -9,6 +9,7 @@ import es.uvigo.esei.dagss.dominio.entidades.Direccion;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;

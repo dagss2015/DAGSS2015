@@ -27,7 +27,7 @@
                                  var="medico" 
                                  selection="#{gestionMedicosControlador.medicoActual}"
                                  selectionMode="single"
-                                 paginator="true" rows="10" rowKey="#{medico.id}">
+                                 paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{medico.id}">
 
                         <p:ajax event="rowSelect"   update="botonNuevo botonVer botonEditar botonBorrar"/>
 

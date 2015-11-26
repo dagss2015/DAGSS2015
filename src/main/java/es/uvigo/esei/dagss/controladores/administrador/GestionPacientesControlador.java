@@ -5,9 +5,12 @@ package es.uvigo.esei.dagss.controladores.administrador;
 
 import es.uvigo.esei.dagss.dominio.daos.CentroSaludDAO;
 import es.uvigo.esei.dagss.dominio.daos.MedicoDAO;
+import es.uvigo.esei.dagss.dominio.daos.PacienteDAO;
 import es.uvigo.esei.dagss.dominio.daos.UsuarioDAO;
 import es.uvigo.esei.dagss.dominio.entidades.CentroSalud;
+import es.uvigo.esei.dagss.dominio.entidades.Direccion;
 import es.uvigo.esei.dagss.dominio.entidades.Medico;
+import es.uvigo.esei.dagss.dominio.entidades.Paciente;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -22,51 +25,50 @@ import javax.faces.context.FacesContext;
  *
  * @author dagss
  */
-@Named(value = "gestionMedicosControlador")
+@Named(value = "gestionPacientesControlador")
 @SessionScoped
-public class GestionMedicosControlador implements Serializable {
+public class GestionPacientesControlador implements Serializable {
+
+    @EJB
+    PacienteDAO pacienteDAO;
 
     @EJB
     MedicoDAO medicoDAO;
 
     @EJB
-    CentroSaludDAO centroSaludDAO;
-
-    @EJB
     UsuarioDAO usuarioDAO;
 
-    List<Medico> medicos;
-    Medico medicoActual;
+    List<Paciente> pacientes;
+    Paciente pacienteActual;
     String password1;
     String password2;
 
-
-    public GestionMedicosControlador() {
+    public GestionPacientesControlador() {
     }
 
     @PostConstruct
     public void inicializar() {
-        medicos = medicoDAO.buscarTodos();
+        pacientes = pacienteDAO.buscarTodos();
+    }
+
+    public List<Paciente> getPacientes() {
+        return pacientes;
+    }
+
+    public void setPacientes(List<Paciente> pacientes) {
+        this.pacientes = pacientes;
+    }
+
+    public Paciente getPacienteActual() {
+        return pacienteActual;
+    }
+
+    public void setPacienteActual(Paciente pacienteActual) {
+        this.pacienteActual = pacienteActual;
     }
 
     public List<Medico> getMedicos() {
-        return medicos;
-    }
-
-    public void setMedicos(List<Medico> medicos) {
-        this.medicos = medicos;
-    }
-
-    public Medico getMedicoActual() {
-        return medicoActual;
-    }
-
-    public void setMedicoActual(Medico medicoActual) {
-        this.medicoActual = medicoActual;
-    }
-
-    public List<CentroSalud> getCentrosSalud() {
-        return centroSaludDAO.buscarTodos();
+        return medicoDAO.buscarTodos();
     }
 
     public String getPassword1() {
@@ -86,18 +88,19 @@ public class GestionMedicosControlador implements Serializable {
     }
 
     public void doEliminar() {
-        medicoDAO.eliminar(medicoActual);
-        medicos = medicoDAO.buscarTodos(); // Actualizar lista de medicos
+        pacienteDAO.eliminar(pacienteActual);
+        pacientes = pacienteDAO.buscarTodos(); // Actualizar lista 
     }
 
     public void doNuevo() {
-        medicoActual = new Medico(); // Medico vacio
-        medicoActual.setFechaAlta(Calendar.getInstance().getTime());
-        medicoActual.setUltimoAcceso(medicoActual.getFechaAlta());
+        pacienteActual = new Paciente(); // Paciente vacio
+        pacienteActual.setDireccion(new Direccion());
+        pacienteActual.setFechaAlta(Calendar.getInstance().getTime());
+        pacienteActual.setUltimoAcceso(pacienteActual.getFechaAlta());
     }
 
-    public void doEditar(Medico medico) {
-        medicoActual = medico;   // Otra alternativa: volver a refrescarlos desde el DAO
+    public void doEditar(Paciente paciente) {
+        pacienteActual = paciente;   // Otra alternativa: volver a refrescarlos desde el DAO
     }
 
     private boolean passwordsVacios() {
@@ -115,14 +118,14 @@ public class GestionMedicosControlador implements Serializable {
 
     public void doGuardarNuevo() {
         if (passwordsValidos()) {
-            // Crea  nuevo
-            medicoActual = medicoDAO.crear(medicoActual);
+            // Crea  nuevo 
+            pacienteActual = pacienteDAO.crear(pacienteActual);
 
-            // Ajustar password 
-            usuarioDAO.actualizarPassword(medicoActual.getId(), password1);
+            // Ajustar su password 
+            usuarioDAO.actualizarPassword(pacienteActual.getId(), password1);
 
-            // Actualiza lista 
-            medicos = medicoDAO.buscarTodos();
+            // Actualiza lista  a mostrar
+            pacientes = pacienteDAO.buscarTodos();
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Password incorrecto (usente o no coincidencia)", ""));
         }
@@ -131,19 +134,19 @@ public class GestionMedicosControlador implements Serializable {
     public void doGuardarEditado() {
         if (passwordsVacios()) { // No modifica password
             // Actualiza 
-            medicoActual = medicoDAO.actualizar(medicoActual);
+            pacienteActual = pacienteDAO.actualizar(pacienteActual);
 
-            // Actualiza lista 
-            medicos = medicoDAO.buscarTodos();        
+            // Actualiza lista  a mostrar
+            pacientes = pacienteDAO.buscarTodos();        
         } else if (password1.equals(password2)) {
-            // Actualiza
-            medicoActual = medicoDAO.actualizar(medicoActual);
+            // Actualiza 
+            pacienteActual = pacienteDAO.actualizar(pacienteActual);
 
             // Actualiza lista a mostrar
-            medicos = medicoDAO.buscarTodos();        
+            pacientes = pacienteDAO.buscarTodos();        
 
             // Ajustar su password 
-            usuarioDAO.actualizarPassword(medicoActual.getId(), password1);
+            usuarioDAO.actualizarPassword(pacienteActual.getId(), password1);
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Passwords incorrectos (no coincidencia)", ""));
         }

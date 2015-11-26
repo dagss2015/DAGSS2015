@@ -27,7 +27,7 @@
                                  var="farmacia" 
                                  selection="#{gestionFarmaciasControlador.farmaciaActual}"
                                  selectionMode="single"
-                                 paginator="true" rows="10" rowKey="#{farmacia.id}">
+                                 paginator="true" paginatorPosition="bottom" rows="10" rowKey="#{farmacia.id}">
 
                         <p:ajax event="rowSelect"   update="botonNuevo botonVer botonEditar botonBorrar"/>
 

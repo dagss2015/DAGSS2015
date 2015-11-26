@@ -93,40 +93,53 @@ public class GestionFarmaciasControlador implements Serializable {
         farmaciaActual = farmacia;   // Otra alternativa: volver a refrescarlos desde el DAO
     }
 
+    private boolean passwordsVacios() {
+        if ((password1 == null) && (password2 == null)) {
+            return true;
+        } else {
+            return (password1.isEmpty() && password2.isEmpty());
+        }
+    }
+
+    private boolean passwordsValidos() {
+        return (!passwordsVacios() && password1.equals(password2));
+    }
+    
+
     public void doGuardarNuevo() {
         if (passwordsValidos()) {
-            // Crea un nueva Farmacia
+            // Crea  nuevo
             farmaciaActual = farmaciaDAO.crear(farmaciaActual);
 
-            // Ajustar su password
+            // Ajustar password 
             usuarioDAO.actualizarPassword(farmaciaActual.getId(), password1);
 
-            // Actualiza lista
+            // Actualiza lista 
             farmacias = farmaciaDAO.buscarTodos();
-
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Password incorrecto (usente o no coincidencia)", ""));
         }
     }
 
     public void doGuardarEditado() {
-        if (passwordsValidos()) {
-            // Actualiza una Farmacia
+        if (passwordsVacios()) { // No modifica password
+            // Actualiza 
             farmaciaActual = farmaciaDAO.actualizar(farmaciaActual);
 
-            // Ajustar su password
+            // Actualiza lista 
+            farmacias = farmaciaDAO.buscarTodos();        
+        } else if (password1.equals(password2)) {
+            // Actualiza
+            farmaciaActual = farmaciaDAO.actualizar(farmaciaActual);
+
+            // Actualiza lista a mostrar
+            farmacias = farmaciaDAO.buscarTodos();        
+
+            // Ajustar su password 
             usuarioDAO.actualizarPassword(farmaciaActual.getId(), password1);
-
-            // Actualiza lista
-            farmacias = farmaciaDAO.buscarTodos();
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Passwords incorrectos (no coincidencia)", ""));
         }
-    }
-
-    private boolean passwordsValidos() {
-        if ((password1 != null) && (password2 != null)) {
-            return password1.equals(password2);
-        }
-        return false;
     }
 
     public String doVolver() {

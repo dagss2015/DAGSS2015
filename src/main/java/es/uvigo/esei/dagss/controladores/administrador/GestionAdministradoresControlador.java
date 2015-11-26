@@ -6,6 +6,7 @@ package es.uvigo.esei.dagss.controladores.administrador;
 import es.uvigo.esei.dagss.dominio.daos.AdministradorDAO;
 import es.uvigo.esei.dagss.dominio.entidades.Administrador;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -26,10 +27,11 @@ public class GestionAdministradoresControlador implements Serializable {
     private Administrador administradorEnEdicion;
     private String password1;
     private String password2;
+    private boolean esNuevo;
 
     @Inject
     Conversation conversation;
-    
+
     @EJB
     private AdministradorDAO administradorDAO;
 
@@ -43,9 +45,10 @@ public class GestionAdministradoresControlador implements Serializable {
     private void inicializarGestionAdministradores() {
         if (conversation.isTransient()) {
             conversation.begin();
-        }        
-        
+        }
+
         administradores = administradorDAO.buscarTodos();
+        esNuevo = false;
     }
 
     public List<Administrador> getAdministradores() {
@@ -62,6 +65,7 @@ public class GestionAdministradoresControlador implements Serializable {
 
     public void setAdministradorEnEdicion(Administrador administradorEnEdicion) {
         this.administradorEnEdicion = administradorEnEdicion;
+        this.esNuevo = false;
     }
 
     public String getPassword1() {
@@ -70,8 +74,8 @@ public class GestionAdministradoresControlador implements Serializable {
 
     public void setPassword1(String password1) {
         this.password1 = password1;
-    }    
-    
+    }
+
     public String getPassword2() {
         return password2;
     }
@@ -98,12 +102,21 @@ public class GestionAdministradoresControlador implements Serializable {
 
     public String doNuevo() {
         administradorEnEdicion = new Administrador();
+        administradorEnEdicion.setFechaAlta(Calendar.getInstance().getTime());
+        administradorEnEdicion.setUltimoAcceso(administradorEnEdicion.getFechaAlta());
+        this.esNuevo = false;
         return "editarAdministrador";
     }
 
     public String doGuardar() {
         // llamar a DAO
-        administradorEnEdicion = administradorDAO.actualizar(administradorEnEdicion);
+        if ((password1 != null) && (password2 != null) && (password1.equals(password2))) {
+            if (this.esNuevo) {
+                administradorEnEdicion = administradorDAO.crear(administradorEnEdicion);
+            } else {
+                administradorEnEdicion = administradorDAO.actualizar(administradorEnEdicion);
+            }
+        }
         return "listaAdministradores";
     }
 
@@ -114,7 +127,6 @@ public class GestionAdministradoresControlador implements Serializable {
         return "listaAdministradores";
     }
 
-    
     public String doVolver() {
         if (!conversation.isTransient()) {
             conversation.end();

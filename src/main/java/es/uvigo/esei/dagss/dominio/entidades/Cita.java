@@ -4,6 +4,7 @@
 package es.uvigo.esei.dagss.dominio.entidades;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -57,6 +58,7 @@ public class Cita implements Serializable {
         this.hora = hora;
         this.duracion = duracion;
         this.estado = estado;
+        
     }
 
     public Long getId() {
